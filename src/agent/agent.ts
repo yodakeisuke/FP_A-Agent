@@ -2,15 +2,15 @@ import { ai as axAi } from "@ax-llm/ax"
 import {
   type AcePlaybookSource,
   loadAcePlaybook,
-} from "../ace/index.js"
+} from "../ace/index"
 import {
   applyPlaybookToProgram,
   createAceAgentProgram,
-} from "../ace/program.js"
-import type { AgentResult } from "../shared/agent-types.js"
-import { ensureLangWatch, getTracer } from "./observability.js"
-import { getDefaultModel, getOpenAIKey } from "./openai.js"
-import { log } from "./utils.js"
+} from "../ace/program"
+import type { AgentResult } from "../shared/agent-types"
+import { ensureLangWatch, getTracer } from "./observability"
+import { getDefaultModel, getOpenAIKey } from "./openai"
+import { log } from "./utils"
 
 function normalizeWhitespace(value: string): string {
   return value.replace(/\s+/g, " ").trim()
