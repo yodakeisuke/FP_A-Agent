@@ -1,0 +1,117 @@
+version: 1
+description: Minimal promptfoo setup for the sample agent
+providers:
+  - id: exec:node dist/index.js --text
+    label: local-agent
+prompts:
+  - "{{input}}"
+tests:
+  - description: Responds with a greeting
+    vars:
+      input: "Greet a new user who just signed up."
+    assertions:
+      - type: contains
+        value: "hello"
+        caseInsensitive: true
+  - description: Explains offline fallback when no key is set
+    vars:
+      input: "Why might this agent return a fallback response?"
+    assertions:
+      - type: contains
+        value: "offline"
+  - description: CFO scenario adheres to ACE playbook format
+    vars:
+      input: "私はSaaS企業のCFOです。直近Q3でARRが前年同期比12%増の一方、チャーンが5%→8%に悪化し、プロフェッショナルサービスの売上比率が22%から31%に上がりました。2025年Q4の営業利益率リバウンドを狙うため、どこに集中すべきか整理してください。"
+    assertions:
+      - type: contains
+        value: "エグゼクティブアジェンダ"
+      - type: contains
+        value: "問いと異常仮説"
+      - type: contains
+        value: "Q1:"
+      - type: contains
+        value: "Q2:"
+      - type: contains
+        value: "異常:"
+      - type: contains
+        value: "洞察（空・雨・傘）"
+      - type: contains
+        value: "空:"
+      - type: contains
+        value: "雨:"
+      - type: contains
+        value: "傘:"
+      - type: contains
+        value: "アクションオプション"
+      - type: contains
+        value: "財務インパクト"
+      - type: contains
+        value: "不足している情報"
+      - type: contains
+        value: "コンテキスト"
+      - type: notContains
+        value: "わかりません"
+      - type: notContains
+        value: "一般的には"
+      - type: notContains
+        value: "AIとして"
+  - description: CEO turnaround scenario keeps banned phrases out
+    vars:
+      input: "当社は国内製造業向けサプライチェーンSaaSを提供していますが、主要顧客の1社が倒産し、運転資本が逼迫しています。CEOの私は銀行交渉と価格改定のどちらを優先すべきか判断したいです。手元にあるのは直近6か月のキャッシュフロー予測だけです。"
+    assertions:
+      - type: contains
+        value: "エグゼクティブアジェンダ"
+      - type: contains
+        value: "問いと異常仮説"
+      - type: contains
+        value: "洞察（空・雨・傘）"
+      - type: contains
+        value: "アクションオプション"
+      - type: contains
+        value: "財務インパクト"
+      - type: contains
+        value: "不足している情報"
+      - type: contains
+        value: "コンテキスト"
+      - type: notContains
+        value: "わかりません"
+      - type: notContains
+        value: "一般的には"
+      - type: notContains
+        value: "AIとして"
+  - description: PE投資シナリオの骨子確認
+    vars:
+      input: "新規市場参入を計画するPEファンドの投資担当です。対象企業は地方ドラッグストアチェーンで、粗利率が昨年から3.8pt下がり、人件費が15%上昇しています。経営陣が打ち手を迷っているので、論点とアクションを整理してください。"
+    assertions:
+      - type: contains
+        value: "エグゼクティブアジェンダ"
+      - type: contains
+        value: "問いと異常仮説"
+      - type: contains
+        value: "洞察（空・雨・傘）"
+      - type: contains
+        value: "アクションオプション"
+      - type: contains
+        value: "財務インパクト"
+      - type: contains
+        value: "不足している情報"
+      - type: contains
+        value: "コンテキスト"
+      - type: contains
+        value: "Q1:"
+      - type: contains
+        value: "Q2:"
+      - type: contains
+        value: "異常:"
+      - type: contains
+        value: "空:"
+      - type: contains
+        value: "雨:"
+      - type: contains
+        value: "傘:"
+      - type: notContains
+        value: "わかりません"
+      - type: notContains
+        value: "一般的には"
+      - type: notContains
+        value: "AIとして"

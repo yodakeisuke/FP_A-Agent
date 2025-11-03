@@ -1,0 +1,77 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+ace-artifact.json
+*.tsbuildinfo
+next-env.d.ts
+
+# Environment variables (Security Critical)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*.local
+*.env
+
+# Promptfoo
+.promptfoo-*
+.promptfoo-home/
+promptfoo-output/
+evals/
+
+# Testing
+coverage/
+*.lcov
+.nyc_output/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.iml
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-workspace
+*.sublime-project
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# OS files
+Thumbs.db
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.cache
+
+# Security sensitive files
+*.pem
+*.key
+*.cert
+*.p12
+*.pfx
+credentials.json
+secrets.json
+auth.json
+config.local.*
+
+# Optional: AI/LLM cache
+.langwatch/
+.ai-cache/
