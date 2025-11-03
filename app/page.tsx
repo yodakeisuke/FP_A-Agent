@@ -1,7 +1,7 @@
 "use client"
 
 import { MessageSquareIcon, SearchIcon } from "lucide-react"
-import { useRef, useState } from "react"
+import { useCallback, useRef, useState } from "react"
 import type { AgentMessageMetadata } from "@/shared/agent-types"
 
 import {
@@ -39,6 +39,10 @@ import {
   PromptInputTools,
 } from "./components/ai-elements/prompt-input"
 import { PromptInputSuggestionChips } from "./components/chat/prompt-suggestion-chips"
+import {
+  MessageFeedbackActions,
+  type MessageFeedbackValue,
+} from "./components/chat/message-feedback-actions"
 import { useAgentChat } from "./hooks/use-agent-chat"
 import { INITIAL_PROMPT, PROMPT_SUGGESTIONS } from "./lib/constants"
 
@@ -49,6 +53,26 @@ export default function HomePage() {
     useAgentChat({
       id: "sample-agent-minimal-ui",
     })
+
+  const [feedbackByMessageId, setFeedbackByMessageId] = useState<
+    Record<string, MessageFeedbackValue>
+  >({})
+
+  const handleFeedbackChange = useCallback(
+    (messageId: string, nextValue: MessageFeedbackValue | undefined) => {
+      setFeedbackByMessageId((prev) => {
+        const updated = { ...prev }
+
+        if (!nextValue) {
+          delete updated[messageId]
+          return updated
+        }
+
+        return { ...updated, [messageId]: nextValue }
+      })
+    },
+    [],
+  )
 
   const getTextFromMessage = (message: (typeof messages)[0]): string => {
     return message.parts
@@ -130,6 +154,16 @@ export default function HomePage() {
                               )}
                             </div>
                           </div>
+                        )}
+                        {message.role === "assistant" && (
+                          <MessageFeedbackActions
+                            className="pt-1"
+                            disabled={isBusy}
+                            onChange={(value) =>
+                              handleFeedbackChange(message.id, value)
+                            }
+                            value={feedbackByMessageId[message.id]}
+                          />
                         )}
                       </MessageContent>
                       <MessageAvatar
