@@ -1,7 +1,7 @@
 import { pathToFileURL } from "node:url"
 import { config } from "dotenv"
-import { compileAcePlaybook } from "../ace/compile.js"
-import { getDefaultModel, getOpenAIKey } from "./openai.js"
+import { compileAcePlaybook } from "../ace/compile"
+import { getDefaultModel, getOpenAIKey } from "./openai"
 
 config()
 

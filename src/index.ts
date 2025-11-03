@@ -1,11 +1,11 @@
 import { fileURLToPath } from "node:url"
 import { config } from "dotenv"
-import { runAgent } from "./agent/agent.js"
+import { runAgent } from "./agent/agent"
 
 config()
 
 export { runAgent }
-export type { AgentResult } from "./shared/agent-types.js"
+export type { AgentResult } from "./shared/agent-types"
 
 async function runFromCli() {
   const args = process.argv.slice(2)

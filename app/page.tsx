@@ -1,7 +1,7 @@
 "use client"
 
 import { MessageSquareIcon, SearchIcon } from "lucide-react"
-import { useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import type { AgentMessageMetadata } from "@/shared/agent-types"
 
 import {
@@ -38,6 +38,11 @@ import {
   PromptInputTextarea,
   PromptInputTools,
 } from "./components/ai-elements/prompt-input"
+import {
+  Actions,
+  ActionsEvaluate,
+  type EvaluationValue,
+} from "./components/ai-elements/actions"
 import { PromptInputSuggestionChips } from "./components/chat/prompt-suggestion-chips"
 import { useAgentChat } from "./hooks/use-agent-chat"
 import { INITIAL_PROMPT, PROMPT_SUGGESTIONS } from "./lib/constants"
@@ -49,6 +54,56 @@ export default function HomePage() {
     useAgentChat({
       id: "sample-agent-minimal-ui",
     })
+
+  const [evaluations, setEvaluations] = useState<
+    Record<string, EvaluationValue>
+  >({})
+
+  useEffect(() => {
+    setEvaluations((previous) => {
+      const activeIds = new Set(messages.map((message) => message.id))
+      let didChange = false
+      const next: Record<string, EvaluationValue> = {}
+
+      for (const [messageId, value] of Object.entries(previous)) {
+        if (activeIds.has(messageId)) {
+          next[messageId] = value
+        } else {
+          didChange = true
+        }
+      }
+
+      if (!didChange && Object.keys(previous).length === Object.keys(next).length) {
+        return previous
+      }
+
+      return next
+    })
+  }, [messages])
+
+  const handleEvaluationChange = useCallback(
+    (messageId: string, value?: EvaluationValue) => {
+      setEvaluations((previous) => {
+        if (!value) {
+          if (!(messageId in previous)) {
+            return previous
+          }
+          const { [messageId]: _removed, ...rest } = previous
+          return rest
+        }
+
+        if (previous[messageId] === value) {
+          return previous
+        }
+
+        return {
+          ...previous,
+          [messageId]: value,
+        }
+      })
+    },
+    [],
+  )
 
   const getTextFromMessage = (message: (typeof messages)[0]): string => {
     return message.parts
@@ -129,6 +184,19 @@ export default function HomePage() {
                                 </p>
                               )}
                             </div>
+                          </div>
+                        )}
+                        {message.role === "assistant" && (
+                          <div className="mt-2 border-t border-border/60 pt-2">
+                            <Actions className="justify-end">
+                              <ActionsEvaluate
+                                disabled={isBusy}
+                                onChange={(value) =>
+                                  handleEvaluationChange(message.id, value)
+                                }
+                                value={evaluations[message.id]}
+                              />
+                            </Actions>
                           </div>
                         )}
                       </MessageContent>
