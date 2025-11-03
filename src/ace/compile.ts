@@ -1,13 +1,13 @@
 import { writeFile } from "node:fs/promises"
 import { AxACE, ai as axAi } from "@ax-llm/ax"
-import { ACE_SEED_DATASET, aceMetric } from "./dataset.js"
+import { ACE_SEED_DATASET, aceMetric } from "./dataset"
 import {
   type AceArtifactFile,
   loadAceArtifact,
   loadAcePlaybook,
   resolveAceArtifactPath,
-} from "./index.js"
-import { applyPlaybookToProgram, createAceAgentProgram } from "./program.js"
+} from "./index"
+import { applyPlaybookToProgram, createAceAgentProgram } from "./program"
 
 export type AceCompileConfig = {
   apiKey: string
